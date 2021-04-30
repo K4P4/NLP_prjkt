@@ -1,10 +1,9 @@
 import streamlit as st
-import matplotlib.pyplot as plt
 import numpy as numpy
 import PyPDF2
 from PyPDF2 import PdfFileReader
 import spacy
-nlp = spacy.load('en_core_web_sm')
+nlp = spacy.load('en_core_web_lg')
 
 junk_pos=['X', 'AUX', 'PUNCT', 'ADV', 'INTJ', 'ADP', 'DET']
 
@@ -40,10 +39,10 @@ def read_pdf(file):
 
 	return all_page_text
 
-st.title("Text summarizer")
+st.title("Keyword extractor")
 uploaded_file = st.file_uploader("Select a text file",["txt","pdf"])
 st.write("or")
-default_value = "This is the text you want to summarize"
+default_value = "This is the text you want to extract keywords from"
 user_input = st.text_area("Enter your own text", default_value)
 
 text=""
@@ -57,7 +56,7 @@ if uploaded_file is not None:
         raw_text = uploaded_file.read()
         text = str(raw_text, 'UTF-8')
         text.lower()
-    st.subheader('Here is your summarized text:')
+    st.subheader('Here is your keywords:')
     textArray = Summarize(text)
     summarized = " ".join(textArray)
     st.write(summarized)
