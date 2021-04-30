@@ -1,8 +1,8 @@
 import streamlit as st
-import numpy as numpy
 import PyPDF2
 from PyPDF2 import PdfFileReader
 import spacy
+
 nlp = spacy.load('en_core_web_lg')
 
 junk_pos=['X', 'AUX', 'PUNCT', 'ADV', 'INTJ', 'ADP', 'DET']
@@ -29,40 +29,14 @@ def Summarize(text):
                     cleaned.append(token.text)
     return cleaned
 
-def read_pdf(file):
-	pdfReader = PdfFileReader(file)
-	count = pdfReader.numPages
-	all_page_text = ""
-	for i in range(count):
-		page = pdfReader.getPage(i)
-		all_page_text += page.extractText()
-
-	return all_page_text
-
 st.title("Keyword extractor")
-uploaded_file = st.file_uploader("Select a text file",["txt","pdf"])
-st.write("or")
 default_value = "This is the text you want to extract keywords from"
 user_input = st.text_area("Enter your own text", default_value)
-
 text=""
 
-
-if uploaded_file is not None:
-    if uploaded_file.name.__contains__(".pdf"):
-        text = read_pdf(uploaded_file)
-        text.lower()
-    elif uploaded_file.name.__contains__(".txt"):
-        raw_text = uploaded_file.read()
-        text = str(raw_text, 'UTF-8')
-        text.lower()
-    st.subheader('Here is your keywords:')
-    textArray = Summarize(text)
-    summarized = " ".join(textArray)
-    st.write(summarized)
-elif user_input is not None:
+if user_input is not None:
     text = user_input
     text.lower()
     textArray = Summarize(text)
     summarized = " ".join(textArray)
-    st.write(summarized)
+st.write(summarized)
